@@ -7,9 +7,9 @@ import play.api.routing.sird._
   * with plain Scala rather than the default Play's router.
   */
 class RouterImpl(implicit tc: TransactController) extends SimpleRouter {
-  override def routes: Routes = {
-    case POST(p"/api/credit")                                         => tc.credit()
-    case POST(p"/api/debit")                                          => tc.debit()
-    case GET(p"/api/history" ? q"n=${int(n)}" & q"page=${int(page)}") => tc.history(n, page)
+  override val routes: Routes = {
+    case POST(p"/api/credit")                                           => tc.credit()
+    case POST(p"/api/debit")                                            => tc.debit()
+    case GET(p"/api/history" ? q"n=${int(n)}" & q_o"page=${int(page)}") => tc.history(n, page)
   }
 }
