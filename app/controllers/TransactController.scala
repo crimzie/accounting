@@ -29,7 +29,6 @@ class TransactController(
           case x =>
             val t = for {
               _ <- storage append -a timeout 5.seconds onErrorRestart 3
-
               y = x - a
               _ <- balance put y
             } yield Ok(y.toString)
@@ -57,7 +56,7 @@ class TransactController(
 
   def history(n: Int, page: Option[Int]): Action[AnyContent] = Action.async {
     storage list () map { l =>
-      val s: Seq[List[Long]] = l.sliding(math.max(10, n)).toList
+      val s: Seq[List[Long]] = l.grouped(math.max(10, n)).toList
       val max = s.length - 1
       val i = page map (x => math.min(math.max(0, x), max)) getOrElse 0
       Ok(JsArray(s(i) map (JsNumber apply _)))
